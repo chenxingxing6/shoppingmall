@@ -14,8 +14,8 @@ public class CommonPage<T> implements Serializable {
     private Integer pageNum;
     private Integer pageSize;
     private Integer totalPage;
-    private Long totalSize;
-    private List<T> datas;
+    private Long total;
+    private List<T> list;
 
 
     /**
@@ -27,8 +27,8 @@ public class CommonPage<T> implements Serializable {
         result.setTotalPage(pageInfo.getPages());
         result.setPageNum(pageInfo.getPageNum());
         result.setPageSize(pageInfo.getPageSize());
-        result.setTotalSize(pageInfo.getTotal());
-        result.setDatas(pageInfo.getList());
+        result.setTotal(pageInfo.getTotal());
+        result.setList(pageInfo.getList());
         return result;
     }
 
@@ -56,19 +56,19 @@ public class CommonPage<T> implements Serializable {
         this.totalPage = totalPage;
     }
 
-    public Long getTotalSize() {
-        return totalSize;
+    public Long getTotal() {
+        return total;
     }
 
-    public void setTotalSize(Long totalSize) {
-        this.totalSize = totalSize;
+    public void setTotal(Long total) {
+        this.total = total;
     }
 
-    public List<T> getDatas() {
-        return datas;
+    public List<T> getList() {
+        return list;
     }
 
-    public void setDatas(List<T> datas) {
-        this.datas = datas;
+    public void setList(List<T> list) {
+        this.list = list;
     }
 }
