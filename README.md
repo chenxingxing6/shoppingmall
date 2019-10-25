@@ -29,7 +29,29 @@
   财务管理    
   权限管理  
   设置...    
-  
+
+---
+
+``` lua
+商品模块
+├── 商品管理
+├── 商品分类管理
+├── 商品类型管理
+├── 品牌管理
+订单模块
+├── 订单管理
+├── 订单设置
+├── 退货申请处理
+├── 退货原因设置
+营销模块
+├── 秒杀活动管理
+├── 优惠价管理
+├── 品牌推荐管理
+├── 新品推荐管理
+├── 人气推荐管理
+├── 专题推荐管理
+├── 首页广告管理
+```
 ---
 
 ## 项目结构
@@ -43,6 +65,14 @@ shoppingmall
 ├── mall-portal -- 前台商城系统接口
 └── mall-demo -- 框架搭建时的测试代码
 ```
+
+---
+## 数据库表相关说明
+> cms_*：内容管理模块相关表  【content management system】
+oms_*：订单管理模块相关表    【order management system】
+pms_*：商品模块相关表  【product management system】
+sms_*：营销模块相关表  【sales management system】
+ums_*：会员模块相关表  【user management system】
 
 ---
 
