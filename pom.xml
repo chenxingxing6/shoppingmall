@@ -36,9 +36,9 @@
         <mybatis.version>3.4.6</mybatis.version>
         <mysql-connector.version>8.0.15</mysql-connector.version>
         <spring-data-commons.version>2.1.5.RELEASE</spring-data-commons.version>
-        <jjwt.version>0.9.0</jjwt.version>
+        <jjwt.version>0.7.0</jjwt.version>
         <aliyun-oss.version>2.5.0</aliyun-oss.version>
-        <logstash-logback.version>4.8</logstash-logback.version>
+        <logstash-logback.version>4.11</logstash-logback.version>
         <lombok.version>1.16.12</lombok.version>
     </properties>
 
@@ -67,6 +67,10 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
     </dependencies>
 
@@ -146,6 +150,10 @@
                 <version>${spring-data-commons.version}</version>
             </dependency>
             <!--JWT(Json Web Token)登录支持-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+            </dependency>
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
