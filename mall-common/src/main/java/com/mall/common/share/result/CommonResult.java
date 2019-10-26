@@ -11,6 +11,8 @@ import java.io.Serializable;
  * Desc: 通用返回对象
  */
 public class CommonResult<T> implements Serializable {
+    private boolean isSucess = true;
+
     private Integer code;
 
     private String message;
@@ -22,6 +24,13 @@ public class CommonResult<T> implements Serializable {
     }
 
     protected CommonResult(Integer code, String message, T data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
+
+    protected CommonResult(boolean isSucess, Integer code, String message, T data) {
+        this.isSucess = isSucess;
         this.code = code;
         this.message = message;
         this.data = data;
@@ -51,7 +60,7 @@ public class CommonResult<T> implements Serializable {
      * @param errorCode 错误码
      */
     public static <T> CommonResult<T> failed(IErrorCode errorCode) {
-        return new CommonResult<T>(errorCode.getCode(), errorCode.getMessage(), null);
+        return new CommonResult<T>(false, errorCode.getCode(), errorCode.getMessage(), null);
     }
 
     /**
@@ -59,7 +68,7 @@ public class CommonResult<T> implements Serializable {
      * @param message 提示信息
      */
     public static <T> CommonResult<T> failed(String message) {
-        return new CommonResult<T>(ResultCode.FAILED.getCode(), message, null);
+        return new CommonResult<T>(false, ResultCode.FAILED.getCode(), message, null);
     }
 
     /**
@@ -81,21 +90,21 @@ public class CommonResult<T> implements Serializable {
      * @param message 提示信息
      */
     public static <T> CommonResult<T> validateFailed(String message) {
-        return new CommonResult<T>(ResultCode.VALIDATE_FAILED.getCode(), message, null);
+        return new CommonResult<T>(false, ResultCode.VALIDATE_FAILED.getCode(), message, null);
     }
 
     /**
      * 未登录返回结果
      */
     public static <T> CommonResult<T> unauthorized(T data) {
-        return new CommonResult<T>(ResultCode.UNAUTHORIZED.getCode(), ResultCode.UNAUTHORIZED.getMessage(), data);
+        return new CommonResult<T>(false, ResultCode.UNAUTHORIZED.getCode(), ResultCode.UNAUTHORIZED.getMessage(), data);
     }
 
     /**
      * 未授权返回结果
      */
     public static <T> CommonResult<T> forbidden(T data) {
-        return new CommonResult<T>(ResultCode.FORBIDDEN.getCode(), ResultCode.FORBIDDEN.getMessage(), data);
+        return new CommonResult<T>(false, ResultCode.FORBIDDEN.getCode(), ResultCode.FORBIDDEN.getMessage(), data);
     }
 
     public Integer getCode() {
@@ -120,5 +129,13 @@ public class CommonResult<T> implements Serializable {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public boolean isSucess() {
+        return isSucess;
+    }
+
+    public void setSucess(boolean sucess) {
+        isSucess = sucess;
     }
 }
