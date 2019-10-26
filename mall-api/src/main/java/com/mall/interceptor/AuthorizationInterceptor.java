@@ -35,6 +35,9 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         }
         //从header中获取token
         String token = request.getHeader("token");
+        if (token.equalsIgnoreCase("undefined")){
+            return true;
+        }
         //如果header中不存在token，则从参数中获取token
         if(StrUtil.isBlank(token)){
             token = request.getParameter("token");

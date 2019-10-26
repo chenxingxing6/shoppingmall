@@ -31,11 +31,10 @@ public class UmsMemberController {
     @ApiOperation("注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult register(@RequestParam String username,
-                                 @RequestParam String password,
-                                 @RequestParam String telephone,
-                                 @RequestParam String authCode) {
-        return memberService.register(username, password, telephone, authCode);
+    public CommonResult register(@RequestParam String mobile,
+                                 @RequestParam String code,
+                                 @RequestParam String pwd){
+        return memberService.registerUser(mobile, code, pwd);
     }
 
     @ApiOperation("登录以后返回token")
@@ -50,6 +49,26 @@ public class UmsMemberController {
             throw new BizException("验证码不能为空");
         }
         String token = memberService.login(telephone, smsCode);
+        if (token == null) {
+            throw new BizException("登陆失败");
+        }
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", token);
+        return CommonResult.success(tokenMap);
+    }
+
+    @ApiOperation("账号登录以后返回token")
+    @RequestMapping(value = "/pwdLogin", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult pwdLogin(@RequestParam String telephone,
+                                 @RequestParam String pwd) {
+        if (StrUtil.isEmpty(telephone)){
+            throw new BizException("手机号不能为空");
+        }
+        if (StrUtil.isEmpty(pwd)){
+            throw new BizException("密码不能为空");
+        }
+        String token = memberService.pwdLogin(telephone, pwd);
         if (token == null) {
             throw new BizException("登陆失败");
         }
@@ -80,5 +99,13 @@ public class UmsMemberController {
                                  @RequestParam String password,
                                  @RequestParam String authCode) {
         return memberService.updatePassword(telephone,password,authCode);
+    }
+
+    @ApiOperation("退出登录")
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult logout(@User UmsMember umsMember) {
+        memberService.loginout(umsMember.getPhone());
+        return CommonResult.success(true);
     }
 }

@@ -24,10 +24,16 @@ public interface UmsMemberService {
     String login(String telephone, String smsCode);
 
     /**
+     * 账号登录
+     */
+    String pwdLogin(String telephone, String pwd);
+
+
+    /**
      * 用户注册
      */
     @Transactional
-    CommonResult register(String username, String password, String telephone, String authCode);
+    CommonResult registerUser(String mobile, String code, String pwd);
 
     /**
      * 生成验证码
@@ -49,4 +55,6 @@ public interface UmsMemberService {
      * 根据会员id修改会员积分
      */
     void updateIntegration(Long id, Integer integration);
+
+    void loginout(String mobile);
 }

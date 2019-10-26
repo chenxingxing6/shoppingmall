@@ -27,7 +27,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authorizationInterceptor).
-                excludePathPatterns("/sso/getAuthCode","/sso/smsLogin");
+                excludePathPatterns("/sso/getAuthCode","/sso/smsLogin","/sso/pwdLogin", "sso/register");
     }
 
     @Override
