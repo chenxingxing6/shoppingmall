@@ -8,21 +8,11 @@ import com.mall.model.UmsMember;
 import com.mall.model.UmsMemberExample;
 import com.mall.model.UmsMemberLevel;
 import com.mall.model.UmsMemberLevelExample;
-import com.mall.domain.MemberDetails;
 import com.mall.service.RedisService;
 import com.mall.service.UmsMemberService;
 import com.mall.util.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -39,11 +29,11 @@ public class UmsMemberServiceImpl implements UmsMemberService {
     @Autowired
     private UmsMemberMapper memberMapper;
     @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+    @Autowired
     private UmsMemberLevelMapper memberLevelMapper;
     @Autowired
     private RedisService redisService;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
     @Value("${redis.key.prefix.authCode}")
     private String REDIS_KEY_PREFIX_AUTH_CODE;
     @Value("${redis.key.expire.authCode}")
@@ -69,23 +59,23 @@ public class UmsMemberServiceImpl implements UmsMemberService {
     public String login(String telephone, String smsCode) {
         String token = null;
         //验证验证码
-        if(!verifyAuthCode(smsCode,telephone)){
+        if (!verifyAuthCode(smsCode, telephone)) {
             throw new BizException("验证码错误");
         }
         UmsMemberExample example = new UmsMemberExample();
         UmsMemberExample.Criteria criteria = example.createCriteria();
         criteria.andPhoneEqualTo(telephone).andStatusEqualTo(1);
         List<UmsMember> umsMembers = memberMapper.selectByExample(example);
-        if (CollectionUtils.isEmpty(umsMembers)){
+        if (CollectionUtils.isEmpty(umsMembers)) {
             throw new BizException("手机号不存在");
         }
         UmsMember umsMember = umsMembers.get(0);
         //密码需要客户端加密后传递
         try {
-            token = jwtTokenUtil.generateToken(null);
+            token = jwtTokenUtil.generateToken(umsMember.getUsername());
             return token;
-        } catch (AuthenticationException e) {
-            throw new BizException("登陆失败" + e.getMessage());
+        } catch (Exception e) {
+            throw new BizException("登陆失败");
         }
     }
 
@@ -155,10 +145,11 @@ public class UmsMemberServiceImpl implements UmsMemberService {
 
     @Override
     public UmsMember getCurrentMember() {
-        SecurityContext ctx = SecurityContextHolder.getContext();
+       /* SecurityContext ctx = SecurityContextHolder.getContext();
         Authentication auth = ctx.getAuthentication();
         MemberDetails memberDetails = (MemberDetails) auth.getPrincipal();
-        return memberDetails.getUmsMember();
+        return memberDetails.getUmsMember();*/
+       return null;
     }
 
     @Override

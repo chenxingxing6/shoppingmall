@@ -3,9 +3,7 @@ package com.mall.component;
 import com.mall.common.exception.BizException;
 import com.mall.common.share.result.CommonResult;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,8 +12,7 @@ import javax.servlet.http.HttpServletRequest;
  * Date: 2019/10/26 14:15
  * Desc: 全局异常拦截器
  */
-@ControllerAdvice
-@ResponseBody
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
@@ -23,16 +20,23 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BizException.class)
     public CommonResult handleRRException(BizException e){
-       return CommonResult.failed(e.getMessage());
+       CommonResult r = new CommonResult(false);
+       r.put("code", e.getCode());
+       r.put("msg", e.getMsg());
+       return r;
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
     public CommonResult handleDuplicateKeyException(DuplicateKeyException e){
-        return CommonResult.failed("数据库中已存在该记录");
+        CommonResult r = new CommonResult(false);
+        r.put("msg", "数据库中已存在该记录");
+        return r;
     }
 
     @ExceptionHandler(value = Exception.class)
     public CommonResult<String> exceptionHandler(HttpServletRequest request, Exception e){
-        return CommonResult.failed(e.getMessage());
+        CommonResult r = new CommonResult(false);
+        r.put("msg", e.getMessage());
+        return r;
     }
 }

@@ -1,8 +1,10 @@
 package com.mall.config;
 
 import com.mall.interceptor.AuthorizationInterceptor;
+import com.mall.resolver.LoginUserHandlerMethodArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -18,10 +20,14 @@ import java.util.List;
 public class WebMvcConfig implements WebMvcConfigurer {
     @Autowired
     private AuthorizationInterceptor authorizationInterceptor;
+    @Autowired
+    private LoginUserHandlerMethodArgumentResolver loginUserHandlerMethodArgumentResolver;
+
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authorizationInterceptor).addPathPatterns("/**").excludePathPatterns("/sso/**");
+        registry.addInterceptor(authorizationInterceptor).
+                excludePathPatterns("/sso/getAuthCode","/sso/smsLogin");
     }
 
     @Override
@@ -31,5 +37,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
                 .maxAge(3600)
                 .allowCredentials(true);
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(loginUserHandlerMethodArgumentResolver);
     }
 }

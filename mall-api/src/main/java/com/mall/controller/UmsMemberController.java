@@ -1,8 +1,10 @@
 package com.mall.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.mall.annotation.User;
 import com.mall.common.exception.BizException;
 import com.mall.common.share.result.CommonResult;
+import com.mall.model.UmsMember;
 import com.mall.service.UmsMemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,6 +56,14 @@ public class UmsMemberController {
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", token);
         return CommonResult.success(tokenMap);
+    }
+
+    @ApiOperation("获取用户信息")
+    @RequestMapping(value = "/userInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult getUserInfo(@User UmsMember umsMember) {
+        umsMember.setPassword(null);
+        return CommonResult.success(umsMember);
     }
 
     @ApiOperation("获取验证码")
